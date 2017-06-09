@@ -2,7 +2,6 @@ package login
 
 import (
 	"crypto/sha256"
-	"encoding/json"
 	"fmt"
 	"math/rand"
 	"net/http"
@@ -10,36 +9,8 @@ import (
 
 	"github.com/gocraft/web"
 	"github.com/itnikolaev/quick_start_go"
-	"github.com/itnikolaev/quick_start_go/sessions"
 )
 
-var sStorage quickstart.SessionStorage
-
-func init() {
-	sStorage = sessions.NewStorage()
-}
-
-func HandleGet(rw web.ResponseWriter, r *web.Request) {
-	c, err := r.Cookie("SESSID")
-	if err != nil {
-		http.Redirect(rw, r.Request, "/", 301)
-		return
-	}
-	sess := sStorage.Get(c.Value)
-	if sess == nil {
-		rw.Header().Add("Content-type", "text/plain")
-		fmt.Fprintf(rw, "session incorrect")
-		return
-	}
-	ba, err := json.Marshal(sess)
-	if err != nil {
-		rw.Header().Add("Content-type", "text/plain")
-		fmt.Fprintf(rw, "json error: %s", err)
-		return
-	}
-	rw.Header().Add("Content-type", "application/json")
-	fmt.Fprintf(rw, "%s", ba)
-}
 
 func HandlePost(rw web.ResponseWriter, r *web.Request) {
 	r.ParseForm()
