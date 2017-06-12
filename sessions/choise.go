@@ -19,6 +19,6 @@ func NewStorage() quickstart.SessionStorage {
 	default:
 		fmt.Println("storage incorrect!")
 		os.Exit(1)
+		return nil
 	}
-	return nil // not need, but syntax...
 }

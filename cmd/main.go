@@ -27,7 +27,6 @@ func main() {
 			fmt.Println("Stoping listening on ", *port)
 			if killSignal == os.Interrupt {
 				fmt.Println("Daemon was interruped by system signal")
-				return
 			}
 			return
 		}

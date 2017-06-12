@@ -7,6 +7,6 @@ type Session struct {
 }
 
 type SessionStorage interface {
-	Get(key string) *Session
+	Get(key string) (*Session, error)
 	Set(key string, s *Session)
 }

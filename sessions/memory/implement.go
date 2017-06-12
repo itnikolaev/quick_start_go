@@ -4,30 +4,34 @@ import (
 	"sync"
 
 	"github.com/itnikolaev/quick_start_go"
+	"fmt"
 )
 
 type Storage struct {
-	mux  sync.RWMutex
+	*sync.RWMutex
 	data map[string]*quickstart.Session
 }
 
+var notFoundError error = fmt.Errorf("not found")
+
 func NewStorage() quickstart.SessionStorage {
 	return &Storage{
-		data: make(map[string]*quickstart.Session),
+		&sync.RWMutex{},
+		make(map[string]*quickstart.Session),
 	}
 }
 
-func (s *Storage) Get(key string) *quickstart.Session {
-	s.mux.RLock()
-	defer s.mux.RUnlock()
+func (s *Storage) Get(key string) (*quickstart.Session, error) {
+	s.RLock()
+	defer s.RUnlock()
 	if sess, ok := s.data[key]; ok {
-		return sess
+		return sess, nil
 	}
-	return nil
+	return nil, notFoundError
 }
 
 func (s *Storage) Set(key string, sess *quickstart.Session) {
-	s.mux.Lock()
+	s.Lock()
 	s.data[key] = sess
-	s.mux.Unlock()
+	s.Unlock()
 }
