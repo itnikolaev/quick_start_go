@@ -1,10 +1,11 @@
 package login
 
 import (
-	"github.com/gocraft/web"
-	"fmt"
 	"encoding/json"
+	"fmt"
 	"net/http"
+
+	"github.com/gocraft/web"
 )
 
 func HandleGet(rw web.ResponseWriter, r *web.Request) {
@@ -13,8 +14,8 @@ func HandleGet(rw web.ResponseWriter, r *web.Request) {
 		http.Redirect(rw, r.Request, "/", 301)
 		return
 	}
-	sess := sStorage.Get(c.Value)
-	if sess == nil {
+	sess, err := sStorage.Get(c.Value)
+	if err != nil {
 		rw.Header().Add("Content-type", "text/plain")
 		fmt.Fprintf(rw, "session incorrect")
 		return
